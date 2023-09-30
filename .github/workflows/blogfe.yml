@@ -7,7 +7,6 @@ on:
 jobs:
   run-blog-fe:
     runs-on: 
-      - ubuntu-latest
       - self-hosted
     steps:
       - uses: actions/checkout@v2
