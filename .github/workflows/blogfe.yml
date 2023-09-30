@@ -6,7 +6,9 @@ on:
     
 jobs:
   run-blog-fe:
-    runs-on: ubuntu-latest
+    runs-on: 
+      - ubuntu-latest
+      - self-hosted
     steps:
       - uses: actions/checkout@v2
       - run: npm install
