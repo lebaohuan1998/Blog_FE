@@ -11,6 +11,7 @@ const authStore = useAuthStore();
                 <router-link to="/" class="nav-item nav-link">Home</router-link>
                 <router-link to="/users" class="nav-item nav-link">Users</router-link>
                 <router-link to="/products" class="nav-item nav-link">Products</router-link>
+                <router-link to="/images" class="nav-item nav-link">Images</router-link>
             </div>
             <div class="div-nav-right">
                 <button @click="authStore.logout()" class="btn btn-link nav-item nav-link">Logout</button>
