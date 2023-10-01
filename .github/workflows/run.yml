@@ -36,7 +36,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: rm .env
-      - run: rm .env .prod .env
+      #- run: rm .env .prod .env
       - run: npm ci
       - run: npm run build --if-present
 
