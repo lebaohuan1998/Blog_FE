@@ -1,61 +1,33 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy
-
+name: Build And Deploy
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
-  #workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-#permissions:
- # contents: read
-  #pages: write
-  #id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-#concurrency:
- # group: "pages"
-  #cancel-in-progress: false
-
 jobs:
-  # Build job
-  build:
-    runs-on: 
-      - ubuntu-latest
-      #- self-hosted
+  build-vue-app:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: rm .env
-      #- run: rm .env .prod .env
-      - run: npm ci
-      - run: npm run build --if-present
-
+    - uses: actions/checkout@v3
+      -name: Use Node.js 16.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: rm .env
+    - run: rm .env .prod .env
+    - run: npm ci
+    - run: npm run build --if-present
       
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: 
-      - ubuntu-latest
-      #- self-hosted
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
-    #- name: Deploy buil ui
-      #uses: appleboy/scp-action@master
-     # env: 
-       # Ho
+  - name: Deploy buil ui
+      uses: appleboy/scp-action@master
+      env: 
+          HOST: ${{ screts.SSH_HOST }}
+          USERNAME: ${{ screts.SSH_USER }}
+          PORT: 22
+          KEY: ${{ screts.SSH_PRIVATE_KEY }}
+      with:
+          source: "dist"
+          strip_components: 1
+          target: "/var/www/elancer.ps/"
+            
+        
     
