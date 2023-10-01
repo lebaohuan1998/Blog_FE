@@ -1,33 +1,29 @@
-name: Build And Deploy
+name: Deploy to Github Pages
 on:
-  push:
-    branches: ["main"]
+    push:
+        branches:
+            - develop
+
 jobs:
-  build-vue-app:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-      -name: Use Node.js 16.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: rm .env
-    - run: rm .env .prod .env
-    - run: npm ci
-    - run: npm run build --if-present
-      
-  - name: Deploy buil ui
-      uses: appleboy/scp-action@master
-      env: 
-          HOST: ${{ screts.SSH_HOST }}
-          USERNAME: ${{ screts.SSH_USER }}
-          PORT: 22
-          KEY: ${{ screts.SSH_PRIVATE_KEY }}
-      with:
-          source: "dist"
-          strip_components: 1
-          target: "/var/www/elancer.ps/"
-            
-        
-    
+    deploy:
+        name: Deploy Application
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@master
+            - name: Create Node Environment
+              uses: actions/setup-node@v1
+              with: 
+                node-version: 10.x
+            - name: Install Packages and Build Application
+              run: |
+                npm install -g @vue/cli yarn
+                yarn install
+                yarn build
+            - name: Deploy
+              uses: s0/git-publish-subdir-action@develop
+              env:
+                REPO: self
+                BRANCH: master
+                FOLDER: dist
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
