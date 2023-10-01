@@ -41,6 +41,7 @@ jobs:
         uses: actions/upload-pages-artifact@v2
       - run: npm i
       #- run: npm run dev --if--present
+      - run: npm run build
 
   # Deployment job
   deploy:
